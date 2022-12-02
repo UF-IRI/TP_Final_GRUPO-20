@@ -1,36 +1,35 @@
 #include "funciones.h"
 
-void leer(Paciente*& array, int n, string nombrep, string nombreco, string nombrecons)
+void leer(Paciente*& array, int n)
 {
 	fstream fpPacientes, fpContactos, fpConsultas;
 	//abrimos los archivos.
-	fpPacientes.open(nombrep, ios::in);
-	fpContactos.open(nombreco, ios::in);
-	fpConsultas.open(nombrecons, ios::in);
+	fpPacientes.open("Pacientes.csv", ios::in);
+	fpContactos.open("Contactos.csv", ios::in);
+	fpConsultas.open("Consultas.csv", ios::in);
 	if (!(fpPacientes.is_open() && fpContactos.is_open() && fpConsultas.is_open())) //comprobamos que abrieron.
 		return;
 	string dummys;
 	char coma;
 	//sacamos los headers de paciente.
-	fpPacientes >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
+	fpPacientes >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
 
 	Paciente aux;//guarda la informacion provisionalmente
-	unsigned int cod;
+	int dni;
 	while (fpPacientes)
 	{
 		//saco los headers cada vez que repito el ciclo de los otros dos archivos.
-		fpContactos >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
-		fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
+		fpContactos >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
+		fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
 		//extraemos la informacion del paciente.
-		fpPacientes >> aux.codigo >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.tipoDeDoc >> coma >> aux.numDeDoc >> coma >> aux.genero >> coma >> aux.nac.dia >> coma >> aux.nac.mes
-			>> coma >> aux.nac.anio >> coma >> aux.estado;
+		fpPacientes >> aux.dni >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.genero >> coma >> aux.nac >> coma >> aux.estado >> coma >> aux.obra_social;
 
 		while (fpContactos) //recorremos el archivo hasta encontrar el contacto con el mismo codigo que el paciente.
 		{
-			fpContactos >> cod >> coma >> aux.con.telefono >> coma >> aux.con.mail >> coma >> aux.con.pais >> coma >> aux.con.ciudad >> coma >> aux.con.calle >> coma >> aux.con.numDireccion
-				>> coma >> aux.con.piso >> coma >> aux.con.depto; //extraemos la informacion.
-			if (aux.codigo == cod) // en caso de que el codigo coincida, se termina el ciclo
+			fpContactos >> dni >> coma >> aux.con.telefono >> coma >> aux.con.celular >> coma >> aux.con.direccion >> coma >> aux.con.mail; //extraemos la informacion.
+			if (aux.dni == dni) // en caso de que el codigo coincida, se termina el ciclo
 			{
+				aux.con.dni = dni;
 				break;
 			}
 		}
@@ -39,17 +38,20 @@ void leer(Paciente*& array, int n, string nombrep, string nombreco, string nombr
 
 		double max = 0; // guarda la fecha maxima y la que se saca del archivo.
 		time_t seconds;
+		string fechaC;
+		string fechaS;
 
 		while (fpConsultas)
 		{
-			fpConsultas >> cod >> coma >> seconds >> coma;
+			fpConsultas >> dni >> coma >> fechaS >> coma >> fechaC >> coma;
 
-			if (aux.codigo == cod && max < seconds)
+
+			if (aux.dni == dni && max < fechaC)
 			{
 				max = seconds; //guardo la fecha max.
-				aux.consulta.fechaC = seconds;
-				fpConsultas >> aux.consulta.motivo >> coma >> aux.consulta.obrasocial >> coma >>
-					aux.consulta.nombreMed >> coma >> aux.consulta.apellidoMed >> coma >> aux.consulta.numMed >> coma >> aux.consulta.mailMed;
+				aux.consulta.fechaturno = seconds;
+				aux.consulta.fecha_solicitado = fechaS;
+				fpConsultas >> aux.consulta.presencialidad >> coma >> aux.consulta.matricula_med;
 			}
 			else
 				fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
@@ -89,9 +91,10 @@ void vigentyarch(Paciente*& array, int n, Paciente*& archivados, Paciente*& vige
 	int i;
 	time_t now = time(NULL);
 	Paciente aux;
+	time_t consulta;
 	for (i = 0; i < n; i++) {
 
-		if (difftime(now, array[i].consulta.fechaC) < 315532800 && (array[i].estado != "fallecido" || array[i].estado != "hospitalizado"))
+		if (difftime(now, consulta) < 315532800 && (array[i].estado != "fallecido" || array[i].estado != "internado"))
 			// solo pusimos la cantidad de segundos de 8 años de 365 dias y 2 bisiestos porque sabemos que hay seguro dos años bisiestos en 10 años
 			//y consideramos que 1 dia es despreciable respecto a la cantidad que se quiere calcular
 			agregarPaciente(vigentes, array[i], &tamv);
@@ -111,12 +114,8 @@ void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados) {
 		return;
 
 	for (int i = 0; i < tama; i++) {//copiamos en el archivo , los archivados.
-		fparchivados << archivados[i].codigo << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].tipoDeDoc << c << archivados[i].numDeDoc
-			<< c << archivados[i].genero << c << archivados[i].consulta.apellidoMed << c << archivados[i].consulta.fechaC << c << archivados[i].consulta.mailMed << c <<
-			archivados[i].consulta.motivo << c << archivados[i].consulta.nombreMed << c << archivados[i].consulta.numMed << c << archivados[i].consulta.obrasocial << c <<
-			archivados[i].con.calle << c << archivados[i].con.ciudad << c << archivados[i].con.depto << c << archivados[i].con.mail << c << archivados[i].con.numDireccion
-			<< archivados[i].con.pais << c << archivados[i].con.piso << c << archivados[i].con.telefono << c << archivados[i].nac.anio << c << archivados[i].nac.dia << c <<
-			archivados[i].nac.mes << c << archivados[i].estado << endl;
+		fparchivados << archivados[i].dni << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].genero << c << archivados[i].nac
+			<< c << archivados[i].estado << c << archivados[i].obra_social << endl;
 	}
 	fparchivados.close();
 	return;
@@ -124,17 +123,32 @@ void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados) {
 
 void medico(Paciente*& array, int n)
 {
-	fstream fp;
-	fp.open("medicos.csv", ios::out);//no pedimos el nombre del archivo porque lo creamos nosotros
+	fstream fp, fp2;
+	string dummy;
+	Medico aux;
+	char c;
+	int i = 0;
 
-	if (!(fp.is_open()))
+	fp.open("UltimosMedicos.csv", ios::out);//no pedimos el nombre del archivo porque lo creamos nosotros
+	fp2.open("Medicos.csv", ios::in);
+	if (!(fp.is_open() && fp2.is_open()))
 		return;
-	fp << "Nombre, Apellido, Telefono, Mail, Obra social" << endl;
-	for (int i = 0; i < n; i++)
+
+	fp << "Matricula, Nombre, Apellido, Telefono, Especialidad, Activo, Obra social" << endl;
+	fp2 >> dummy >> c >> dummy >> c >> dummy >> c >> dummy >> c >> dummy >> c >> dummy >> c >> dummy;
+	while(fp2)
 	{
-		fp << array[i].consulta.nombreMed << ',' << array[i].consulta.apellidoMed << ',' << array[i].consulta.numMed << ',' << array[i].consulta.mailMed << ','
-			<< array[i].consulta.obrasocial << endl;
+		fp2 << aux.matricula << c << aux.nombre << c << aux.apellido << c << aux.telefono << c << aux.especialidad << c << aux.activo;
+		for (i = 0; i < n; i++)
+		{
+			if (array[i].consulta.matricula_med == aux.matricula)
+			{
+				fp << aux.matricula << ',' << aux.nombre << ',' << aux.apellido << ',' << aux.telefono << ','
+					<< aux.especialidad << ',' << aux.activo << ',' << array[i].obra_social << endl;
+			}
+		}
 	}
+	
 	fp.close();
 	return;
 }

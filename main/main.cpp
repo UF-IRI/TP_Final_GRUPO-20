@@ -8,15 +8,9 @@ using namespace std;
 int main(int argc, char** argv)
 {
     int tamP = 0;
-    string nombrep, nombreco, nombrecons, nombrearchivados;
+    string nombrearchivados;
     Paciente* pacientes = new Paciente[tamP];
-    cout << "Ingrese nombre del archivo paciente con su extension: " << endl;
-    cin >> nombrep;
-    cout << "Ingrese nombre del archivo contacto con su extension: " << endl;
-    cin >> nombreco;
-    cout << "Ingrese nombre del archivo consulta con su extension: " << endl;
-    cin >> nombrecons;
-    leer(pacientes, tamP, nombrep, nombreco, nombrecons);
+    leer(pacientes, tamP);
     int tamv = 0;
     int tama = 0;
     Paciente* vigentes = new Paciente[tamv];

@@ -42,7 +42,7 @@ struct paciente
     string nombre;
     string apellido;
     string tipoDeDoc;
-    int obra-social;
+    int obra_social;
     char genero;
     Contacto con;
     UltimaConsulta consulta;
@@ -63,7 +63,7 @@ struct medico
 
 
 void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama, string nombrecons);
-void leer(Paciente*& array, int n, string  nombrep, string nombreco, string nombrecons);
+void leer(Paciente*& array, int n);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
 void vigentyarch(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
 void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados);
