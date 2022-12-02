@@ -13,48 +13,53 @@ struct fecha
     unsigned int anio{};
 };
 
+//dni_pac , fecha_solicitado , fecha_turno , presento , matricula_med
 
 struct ultimaConsulta
 {
-    time_t fechaC{};
-    string motivo;
-    string obrasocial;
-    string nombreMed;
-    string apellidoMed;
-    unsigned int numMed{};
-    string mailMed;
+    unsigned int dni;
+    string fecha_solicitado;
+    string fechaturno;
+    unsigned int presencialidad;
+    string matricula_med;
 
 }; typedef struct ultimaConsulta UltimaConsulta;
 
-
+//dni_paciente , telefono , celular , direccion , mail
 struct contacto
 {
-    unsigned int telefono{};
+    unsigned int dni;
     string mail;
-    string pais;
-    string ciudad;
-    string calle;
-    unsigned int numDireccion{};
-    int piso{};
-    char depto{};
+    string celular;
+    string telefono;
+    string direccion;
 
 }; typedef struct contacto Contacto;
-
+//dni , nombre , apellido , sexo , natalicio , estado , obra_social
 struct paciente
 {
-    unsigned int codigo{};
+    int dni;
     string nombre;
     string apellido;
     string tipoDeDoc;
-    unsigned int numDeDoc{};
-    char genero{};
+    int obra-social;
+    char genero;
     Contacto con;
     UltimaConsulta consulta;
-    fecha nac;
+    string nac;
     string estado;
 
 }; typedef struct paciente Paciente;
-
+//matricula , nombre , apellido , telefono , especialidad , activo
+struct medico
+{
+    string matricula;
+    string nombre;
+    string apellido;
+    string telefono;
+    string especialidad;
+    int activo;
+}; typedef struct medico Medico;
 
 
 void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama, string nombrecons);
