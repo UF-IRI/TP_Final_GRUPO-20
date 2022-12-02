@@ -17,10 +17,10 @@ struct fecha
 
 struct ultimaConsulta
 {
-    unsigned int dni;
+    unsigned int dni{};
     string fecha_solicitado;
     string fechaturno;
-    unsigned int presencialidad;
+    unsigned int presencialidad{};
     string matricula_med;
 
 }; typedef struct ultimaConsulta UltimaConsulta;
@@ -28,7 +28,7 @@ struct ultimaConsulta
 //dni_paciente , telefono , celular , direccion , mail
 struct contacto
 {
-    unsigned int dni;
+    unsigned int dni{};
     string mail;
     string celular;
     string telefono;
@@ -38,12 +38,12 @@ struct contacto
 //dni , nombre , apellido , sexo , natalicio , estado , obra_social
 struct paciente
 {
-    int dni;
+    int dni{};
     string nombre;
     string apellido;
     string tipoDeDoc;
-    int obra_social;
-    char genero;
+    string obra_social;
+    char genero{};
     Contacto con;
     UltimaConsulta consulta;
     string nac;
