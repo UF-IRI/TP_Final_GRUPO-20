@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     cout << "Ingrese nombre del archivo archivados con su extension :" << endl;
     cin >> nombrearchivados;
     vigentyarch(pacientes, tamP, archivados, vigentes, tama, tamv);
-    secretaria(vigentes, tamv, archivados, tama, nombrecons);
+    secretaria(vigentes, tamv, archivados, tama);
     archivoarchi(archivados, tama, nombrearchivados);
     delete[]pacientes;
     delete[]vigentes;

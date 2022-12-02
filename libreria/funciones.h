@@ -62,12 +62,12 @@ struct medico
 }; typedef struct medico Medico;
 
 
-void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama, string nombrecons);
+void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
 void leer(Paciente*& array, int n);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
 void vigentyarch(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
 void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados);
 void pendiente(Paciente*& pendientes, int tamp);
-void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam, int*& codes, int code);
-void Consultas(UltimaConsulta*& consulta, int tamC, string nombre, int*& code);
+void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
+void Consultas(UltimaConsulta*& consulta, int tamC);
 void eliminarVigente(Paciente*& array, int* tam, int cont);
