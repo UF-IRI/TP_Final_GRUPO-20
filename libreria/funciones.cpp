@@ -40,20 +40,42 @@ void leer(Paciente*& array, int n)
 
 		double max = 0; // guarda la fecha maxima y la que se saca del archivo.
 		time_t seconds;
-		string fechaC;
-		string fechaS;
-
+		string fechaaux;
+		string fechaS,fechaC;
+		stringstream f;
+		string str;
+		int dia, mes, anio;
+		tm* auxi = new tm;
 		while (fpConsultas)
 		{
-			fpConsultas >> dni >> coma >> fechaS >> coma >> fechaC >> coma;
-
+			fpConsultas >> dni >> coma >> fechaS >> coma;
+			f << str;
+			getline(f, fechaaux, "/");
+			dia = stoi(fechaaux);//convierte un string en int.
+			getline(f, fechaaux, "/");
+			mes = stoi(fechaaux);
+			getline(f, fechaux, "/");
+			anio = stoi(fechaux, "/");
+			fechaC = anio * 10000 + mes * 100 + dia;
 
 			if (aux.dni == dni && max < fechaC)
 			{
+				max = fechaC;
+				time(&seconds);
+				localtime_s(auxi, &seconds);
+				auxi->tm_sec = 0;
+				auxi->tm_year = anio - 1900;
+				auxi->tm_mon = mes - 1;
+				auxi->tm_hour = 0;
+				auxi->tm_min = 0;
+				auxi->tm_mday = dia;
+				aux.consulta.fechaturno = mktime(auxi);
+				/*+++++++++++++++
 				max = seconds; //guardo la fecha max.
-				aux.consulta.fechaturno = seconds;
+				aux.consulta.fechaturno = seconds;              (no lo borro)
 				aux.consulta.fecha_solicitado = fechaS;
 				fpConsultas >> aux.consulta.presencialidad >> coma >> aux.consulta.matricula_med;
+				++++++++++++++++++++*/
 			}
 			else
 				fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
