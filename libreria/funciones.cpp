@@ -26,7 +26,9 @@ void leer(Paciente*& array, int n)
 
 		while (fpContactos) //recorremos el archivo hasta encontrar el contacto con el mismo codigo que el paciente.
 		{
-			fpContactos >> dni >> coma >> aux.con.telefono >> coma >> aux.con.celular >> coma >> aux.con.direccion >> coma >> aux.con.mail; //extraemos la informacion.
+			fpContactos >> dni >> coma >> aux.con.telefono >> coma >> aux.con.celular >> coma;
+			getline(fpContactos, aux.con.direccion, ",");
+			fpContactos >> aux.con.mail; //extraemos la informacion.
 			if (aux.dni == dni) // en caso de que el codigo coincida, se termina el ciclo
 			{
 				aux.con.dni = dni;
