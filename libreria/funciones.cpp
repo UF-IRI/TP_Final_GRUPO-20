@@ -27,7 +27,7 @@ void leer(Paciente*& array, int n)
 		while (fpContactos) //recorremos el archivo hasta encontrar el contacto con el mismo codigo que el paciente.
 		{
 			fpContactos >> dni >> coma >> aux.con.telefono >> coma >> aux.con.celular >> coma;
-			getline(fpContactos, aux.con.direccion, ",");
+			getline(fpContactos, aux.con.direccion,',');
 			fpContactos >> aux.con.mail; //extraemos la informacion.
 			if (aux.dni == dni) // en caso de que el codigo coincida, se termina el ciclo
 			{
@@ -42,7 +42,7 @@ void leer(Paciente*& array, int n)
 		time_t seconds;
 		string fechaaux;
 		string fechaS,fechaC;
-		stringstream f;
+		stringstream f;//
 		string str;
 		int dia, mes, anio;
 		tm* auxi = new tm;
@@ -50,12 +50,12 @@ void leer(Paciente*& array, int n)
 		{
 			fpConsultas >> dni >> coma >> fechaS >> coma;
 			f << str;
-			getline(f, fechaaux, "/");
+			getline(f, fechaaux, '/');
 			dia = stoi(fechaaux);//convierte un string en int.
-			getline(f, fechaaux, "/");
+			getline(f, fechaaux,'/');
 			mes = stoi(fechaaux);
-			getline(f, fechaux, "/");
-			anio = stoi(fechaux, "/");
+			getline(f, fechaaux,'/');
+			anio = stoi(fechaaux);
 			fechaC = anio * 10000 + mes * 100 + dia;
 
 			if (aux.dni == dni && max < fechaC)

@@ -1,6 +1,6 @@
 ## >>>>>>>>>>>>>>>
 ## >>>>>>>>>>>>>>>
-add_library(libreria funciones.cpp "funciones.h"")
+add_library(libreria funciones.cpp "funciones.h")
 ## <<<<<<<<<<<<<<<
 ## <<<<<<<<<<<<<<<
 
