@@ -20,7 +20,6 @@ void leer(Paciente*& array, int n)
 	{
 		//saco los headers cada vez que repito el ciclo de los otros dos archivos.
 		fpContactos >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
-		fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
 		//extraemos la informacion del paciente.
 		fpPacientes >> aux.dni >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.genero >> coma >> aux.nac >> coma >> aux.estado >> coma >> aux.obra_social;
 
@@ -35,63 +34,59 @@ void leer(Paciente*& array, int n)
 				break;
 			}
 		}
-
-		fpContactos.seekg(fpContactos.beg);
-
-		double max = 0; // guarda la fecha maxima y la que se saca del archivo.
-		time_t seconds;
-		string fechaaux;
-		string fechaS,fechaC;
-		stringstream f;//
-		string str;
-		int dia, mes, anio;
-		tm* auxi = new tm;
-		while (fpConsultas)
-		{
-			fpConsultas >> dni >> coma >> fechaS >> coma;
-			f << str;
-			getline(f, fechaaux, '/');
-			dia = stoi(fechaaux);//convierte un string en int.
-			getline(f, fechaaux,'/');
-			mes = stoi(fechaaux);
-			getline(f, fechaaux,'/');
-			anio = stoi(fechaaux);
-			fechaC = anio * 10000 + mes * 100 + dia;
-
-			if (aux.dni == dni && max < fechaC)
-			{
-				max = fechaC;
-				time(&seconds);
-				localtime_s(auxi, &seconds);
-				auxi->tm_sec = 0;
-				auxi->tm_year = anio - 1900;
-				auxi->tm_mon = mes - 1;
-				auxi->tm_hour = 0;
-				auxi->tm_min = 0;
-				auxi->tm_mday = dia;
-				aux.consulta.fechaturno = mktime(auxi);
-				/*+++++++++++++++
-				max = seconds; //guardo la fecha max.
-				aux.consulta.fechaturno = seconds;              (no lo borro)
-				aux.consulta.fecha_solicitado = fechaS;
-				fpConsultas >> aux.consulta.presencialidad >> coma >> aux.consulta.matricula_med;
-				++++++++++++++++++++*/
-			}
-			else
-				fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
-		}
-
-		fpConsultas.seekg(fpConsultas.beg);
+	}
 
 		agregarPaciente(array, aux, &n);
 
-	}
-
 	fpPacientes.close();
 	fpContactos.close();
-	fpConsultas.close();
 
 	return;
+}
+
+void leerConsultas(UltimaConsulta*& array, int n)
+{
+	fstream fpConsultas;
+	fpConsultas.open("Consultas.csv", ios::in);
+	if (!(fpConsultas.is_open()))
+		return;
+
+	char coma;
+	string dummys;
+	UltimaConsulta aux;
+	string fechAux;
+	stringstream fp;
+	string str;
+	double fecha;
+	int anio, dia, mes;
+	time_t fechaC;
+	tm* consulta = new tm;;
+
+	fpConsultas >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
+
+	while (fpConsultas)
+	{
+		fpConsultas >> aux.dni >> coma >> aux.fecha_solicitado >> coma >> str >> coma >> aux.presencialidad >> coma >> aux.matricula_med;
+
+		fp << str;
+		getline(fp, fechAux, '/');
+		dia = stoi(fechAux);//convierte un string en int.
+		getline(fp, fechAux, '/');
+		mes = stoi(fechAux);
+		getline(fp, fechAux, '/');
+		anio = stoi(fechAux);
+		time(&fechaC);
+		localtime_s(consulta, &fechaC);
+		consulta->tm_sec = 0;
+		consulta->tm_year = anio - 1900;
+		consulta->tm_mon = mes - 1;
+		consulta->tm_hour = 0;
+		consulta->tm_min = 0;
+		consulta->tm_mday = dia;
+		aux.fechaturno = mktime(consulta);
+
+		AgregarConsulta(array, aux, &n);
+	}
 }
 
 void agregarPaciente(Paciente*& array, Paciente aux, int* tam) {
@@ -368,3 +363,21 @@ void eliminarVigente(Paciente*& array, int* tam, int cont)
 	array = aux1;
 
 }
+/*	fp << str;
+			getline(fp, fechAux, '/');
+			dia = stoi(fechAux);//convierte un string en int.
+			getline(fp, fechAux, '/');
+			mes = stoi(fechAux);
+			getline(fp, fechAux, '/');
+			anio = stoi(fechAux);
+			fecha = anio * 10000 + mes * 100 + dia;
+
+			if (array[i].dni == dni && max < fecha)
+			{
+				max = fecha;
+				aux.dni = dni;
+				aux.fechaturno = str;
+				aux.fecha_solicitado = fechaS;
+				fpConsultas >> aux.presencialidad >> coma >> aux.matricula_med;
+			}
+			*/

@@ -21,7 +21,7 @@ struct ultimaConsulta
 {
     unsigned int dni{};
     string fecha_solicitado;
-    string fechaturno;
+    time_t fechaturno{};
     unsigned int presencialidad{};
     string matricula_med;
 
