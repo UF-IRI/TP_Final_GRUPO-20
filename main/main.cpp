@@ -18,7 +18,9 @@ int main(int argc, char** argv)
     UltimaConsulta* consultas = new UltimaConsulta[tamult];
     Medico* Medicos = new Medico[tamM];
     UltimoMedico* ultimos = new UltimoMedico[tamUltimos];
-    leerPaciente(pacientes, tamP);
+    fstream fpPacientes;
+    fpPacientes.open("Pacientes.csv", ios::in);
+    leerPaciente(pacientes, tamP, fpPacientes);
     leercontacto(contactos, tamcon);
     leerConsultas(consultas, tamult);
     leerMedicos(Medicos, tamM);

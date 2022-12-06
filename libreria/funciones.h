@@ -69,22 +69,39 @@ struct medico
     int activo{};
 }; typedef struct medico Medico;
 
+//LEER
+void leerPaciente(Paciente*& array, int n, fstream fpPacientes);
+void leercontacto(Contacto*& con, int n);
+void leerConsultas(UltimaConsulta*& array, int n);
+void leerMedicos(Medico*& array, int n);
+//
 
-void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
-void leerPaciente(Paciente*& array, int n);
+//AGREGAR
+void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
+void agregarContacto(Contacto*& con, Contacto aux, int* tam);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
+void ultimosMedicos(UltimoMedico*& array, UltimoMedico aux, int* tam);
+void agregarMedicos(Medico*& medicos, Medico aux, int* tam);
+//
+
+//MANEJO DE PACIENTES
 void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
+void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult, Contacto*& con, int tamcon);
+//
+
+//GUARDAR Y CREAR ARCHIVOS
+void medicos(UltimoMedico*& ultimo, Paciente*& array, Medico*& med, int tamP, int tamM, int tamUltimos);
 void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC);
 void pendiente(Paciente*& pendientes, int tamp);
-void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
 void Consultas(UltimaConsulta*& consulta, int tamC);
-void eliminarVigente(Paciente*& array, int* tam, int cont);
-void leercontacto(Contacto*& con, int n);
-void agregarContacto(Contacto*& con, Contacto aux, int* tam);
-void leerConsultas(UltimaConsulta*& array, int n);
-void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult, Contacto*& con, int tamcon);
-void medicos(UltimoMedico *&ultimo, Paciente*& array, Medico *&med, int tamP, int tamM, int tamUltimos);
-void leerMedicos(Medico*& array, int n);
-void ultimosMedicos(UltimoMedico *&array, UltimoMedico aux, int *tam);
 void archivoMedicos(UltimoMedico*& array, int tam);
 void archivoVigentes(paciente*& vigentes, int tamv);
+//
+
+//ELIMINAR
+void eliminarVigente(Paciente*& array, int* tam, int cont);
+//
+
+//SECRETARIA
+void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
+//

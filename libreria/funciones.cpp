@@ -1,10 +1,8 @@
 #include "funciones.h"
 //leemos paciente y los pasamos a una array dinamico
-void leerPaciente(Paciente*& array, int n)
+void leerPaciente(Paciente*& array, int n, fstream fpPacientes)
 {
-	fstream fpPacientes;
 	//abrimos los archivos.
-	fpPacientes.open("Pacientes.csv", ios::in);
 	
 	if (!(fpPacientes.is_open())) //comprobamos que abrieron.
 		return;
@@ -320,6 +318,8 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 	UltimaConsulta aux;
 	int pos;
 	string respuesta;
+	char fechaS[36], fechaT[36];
+
 	do {
 		cout << "Ingrese el dni del paciente a buscar: ";
 		cin >> dni;
@@ -353,8 +353,12 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 		switch (opcion) {
 		case 1:
 			time_t now;
-			int month, year, day;
+			int month, year, day, hora, minutos;
 			cout << "Ingresar los datos de la proxima consulta" << endl;
+			cout << "Ingresar hora de la consulta: " << endl;
+			cin >> hora;
+			cout << "Ingrese el minuto de la consulta: " << endl;
+			cin >> minutos;
 			cout << "Ingrese el dia: " << endl;
 			cin >> day;
 			cout << "Ingrese el mes: ";
@@ -362,13 +366,14 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 			cout << "Ingrese el anio: " << endl;
 			cin >> year;
 			time(&now);
-			aux.fecha_solicitado = now;
 			localtime_s(auxi, &now);
+			asctime_s(fechaS, 36, auxi);
+			aux.fecha_solicitado = fechaS;
 			auxi->tm_sec = 0;
 			auxi->tm_year = year - 1900;
 			auxi->tm_mon = month - 1;
-			auxi->tm_hour = 0;
-			auxi->tm_min = 0;
+			auxi->tm_hour = hora;
+			auxi->tm_min = minutos;
 			auxi->tm_mday = day;
 			aux.fechaturno = mktime(auxi);
 
@@ -458,13 +463,17 @@ void pendiente(Paciente*& pendientes, int tamp) {
 void Consultas(UltimaConsulta*& consulta, int tamC)
 {
 	fstream fp;
+	tm* aux = new tm;
+	char fecha[36];
+
 	fp.open("Consultas.csv", ios::app);
 	if (!(fp.is_open()))
 		return;
 	for (int i = 0; i < tamC; i++)
 	{
-		fp << consulta[i].dni << ',' << consulta[i].fecha_solicitado << ',' << consulta[i].fechaturno << ',' << consulta[i].presencialidad << ','
-			<< consulta[i].matricula_med << endl;
+		localtime_s(aux, &consulta[i].fechaturno);
+		asctime_s(fecha, 36, aux);
+		fp << consulta[i].dni << ',' << consulta[i].fecha_solicitado << ',' << fecha << ',' << consulta[i].presencialidad << ',' << consulta[i].matricula_med << endl;
 	}
 
 	fp.close();
