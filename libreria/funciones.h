@@ -16,6 +16,19 @@ struct fecha
 };
 
 //dni_pac , fecha_solicitado , fecha_turno , presento , matricula_med
+struct ultimoMedico
+{
+    unsigned int dni{};
+    string nombreP;
+    string apellidoP;
+    string obra_social;
+    string matricula;
+    string nombreM;
+    string apellidoM;
+    string telefonoM;
+    string especialidad;
+    int activo{};
+}; typedef struct ultimoMedico UltimoMedico;
 
 struct ultimaConsulta
 {
@@ -67,7 +80,7 @@ struct medico
 void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
 void leerPaciente(Paciente*& array, int n);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
-void vigentyarch(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
+void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
 void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados);
 void pendiente(Paciente*& pendientes, int tamp);
 void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
@@ -77,3 +90,7 @@ void leercontacto(Contacto*& con, int n);
 void agregarContacto(Contacto*& con, Contacto aux, int* tam);
 void leerConsultas(UltimaConsulta*& array, int n);
 void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult, Contacto*& con, int tamcon);
+void medicos(UltimoMedico *&ultimo, Paciente*& array, Medico *&med, int tamP, int tamM, int tamUltimos);
+void leerMedicos(Medico*& array, int n);
+void ultimosMedicos(UltimoMedico *&array, UltimoMedico aux, int *tam);
+void archivoMedicos(UltimoMedico*& array, int tam);
