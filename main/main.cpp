@@ -9,9 +9,16 @@ using namespace std;
 int main(int argc, char** argv)
 {
     int tamP = 0;
+    int tamcon = 0;
+    int tamult = 0;
     string nombrearchivados;
     Paciente* pacientes = new Paciente[tamP];
-    leer(pacientes, tamP);
+    Contacto* contactos = new Contacto[tamcon];
+    UltimaConsulta* consultas = new UltimaConsulta[tamult];
+    leerPaciente(pacientes, tamP);
+    leercontacto(contactos, tamcon);
+    leerConsultas(consultas, tamult);
+    unicoPaciente(pacientes, tamP, consultas, tamult, contactos, tamcon);
     int tamv = 0;
     int tama = 0;
     Paciente* vigentes = new Paciente[tamv];
