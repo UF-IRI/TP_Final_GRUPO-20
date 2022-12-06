@@ -1,10 +1,9 @@
 #include "funciones.h"
+
 //leemos paciente y los pasamos a una array dinamico
-void leerPaciente(Paciente*& array, int n)
+void leerPaciente(fstream& fpPacientes, Paciente*& array, int n)
 {
 	//abrimos los archivos.
-	fstream fpPacientes;
-	fpPacientes.open("Pacientes.csv", ios::in);
 	if (!(fpPacientes.is_open())) //comprobamos que abrieron.
 		return;
 

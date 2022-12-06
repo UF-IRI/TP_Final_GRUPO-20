@@ -6,6 +6,7 @@
 #include<sstream>
 #include<iomanip>
 
+
 using namespace std;
 
 //dni_pac , fecha_solicitado , fecha_turno , presento , matricula_med
@@ -70,7 +71,7 @@ struct medico
 }; typedef struct medico Medico;
 
 //LEER
-void leerPaciente(Paciente*& array, int n);
+void leerPaciente(fstream& fpPacientes,Paciente*& array, int n);
 void leercontacto(Contacto*& con, int n);
 void leerConsultas(UltimaConsulta*& array, int n);
 void leerMedicos(Medico*& array, int n);

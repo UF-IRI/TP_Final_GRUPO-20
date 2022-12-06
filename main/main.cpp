@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main(int argc, char** argv)
+int main()
 {
     int tamP = 0;
     int tamcon = 0;
@@ -19,8 +19,10 @@ int main(int argc, char** argv)
     Medico* Medicos = new Medico[tamM];
     UltimoMedico* ultimos = new UltimoMedico[tamUltimos];
     fstream fpPacientes;
-    fpPacientes.open("Pacientes.csv", ios::in);
-    leerPaciente(pacientes, tamP);
+    string routePac = (BASE_PATH + "../data_files/input/Pacientes.csv");
+    
+    fpPacientes.open(routePac, ios::in);
+    leerPaciente(fpPacientes,pacientes, tamP);
     leercontacto(contactos, tamcon);
     leerConsultas(consultas, tamult);
     leerMedicos(Medicos, tamM);
