@@ -4,9 +4,7 @@ void leerPaciente(Paciente*& array, int n)
 {
 	//abrimos los archivos.
 	fstream fpPacientes;
-
-
-	
+	fpPacientes.open("Pacientes.csv", ios::in);
 	if (!(fpPacientes.is_open())) //comprobamos que abrieron.
 		return;
 
@@ -321,7 +319,8 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 	UltimaConsulta aux;
 	int pos;
 	string respuesta;
-	char fechaS[36], fechaT[36];
+	char fechaS[36];
+	char fechaT[36];
 
 	do {
 		cout << "Ingrese el dni del paciente a buscar: ";
