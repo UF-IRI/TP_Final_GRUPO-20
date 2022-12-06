@@ -87,4 +87,4 @@ void medicos(UltimoMedico *&ultimo, Paciente*& array, Medico *&med, int tamP, in
 void leerMedicos(Medico*& array, int n);
 void ultimosMedicos(UltimoMedico *&array, UltimoMedico aux, int *tam);
 void archivoMedicos(UltimoMedico*& array, int tam);
-void archivoVigentes(paciente*& vigentes, int* tamv);
+void archivoVigentes(paciente*& vigentes, int tamv);

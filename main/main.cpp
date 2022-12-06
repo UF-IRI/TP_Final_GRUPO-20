@@ -33,7 +33,7 @@ int main(int argc, char** argv)
     delete[]Medicos;
     delete[]ultimos;
     secretaria(vigentes, tamv, archivados, tama);
-    archivoarchi(archivados, tama);
+    archivoarchi(archivados, consultas, tama, tamult);
     delete[]consultas;
     delete[]pacientes;
     delete[]vigentes;

@@ -509,14 +509,19 @@ void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, i
 	fparchivados.close();
 	return;
 }
+//guardamos los vigentes en su respectivo archivo
 void archivoVigentes(paciente*& vigentes, int tamv) {
 	fstream fpv;
 	int i;
 	char c = ',';
+
 	fpv.open("vigentes.csv", ios::out);
+
 	if (!(fpv.is_open()))
 		return;
-	fpv << "dni , nombre , apellido , sexo , natalicio , estado , obra_social"<<endl;
+
+	fpv << "DNI , Nombre , Apellido , Sexo , Natalicio , Estado , Obra_social"<<endl;
+
 	for (i = 0; i < tamv; i++) {
 		fpv << vigentes[i].dni << c << vigentes[i].nombre << c << vigentes[i].apellido << c << vigentes[i].genero << c << vigentes[i].nac << c 
 			<< vigentes[i].estado << c << vigentes[i].obra_social << endl;
