@@ -50,7 +50,6 @@ struct paciente
     int dni{};
     string nombre;
     string apellido;
-    string tipoDeDoc;
     string obra_social;
     char genero{};
     Contacto con;
@@ -71,10 +70,10 @@ struct medico
 }; typedef struct medico Medico;
 
 //LEER
-void leerPaciente(fstream& fpPacientes,Paciente*& array, int n);
-void leercontacto(Contacto*& con, int n);
-void leerConsultas(UltimaConsulta*& array, int n);
-void leerMedicos(Medico*& array, int n);
+void leerPaciente(fstream& fpPacientes,Paciente*& array, int* n);
+void leercontacto(fstream& fpContactos,Contacto*& con, int* n);
+void leerConsultas(fstream& fpConsultas, UltimaConsulta*& array, int* n);
+void leerMedicos(fstream& fpMedicos, Medico*& array, int* n);
 //
 
 //AGREGAR
@@ -86,8 +85,8 @@ void agregarMedicos(Medico*& medicos, Medico aux, int* tam);
 //
 
 //MANEJO DE PACIENTES
-void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
-void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult, Contacto*& con, int tamcon);
+void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int *tama, int *tamv);
+void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int *tamult, Contacto*& con, int *tamcon);
 //
 
 //GUARDAR Y CREAR ARCHIVOS
@@ -104,5 +103,5 @@ void eliminarVigente(Paciente*& array, int* tam, int cont);
 //
 
 //SECRETARIA
-void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
+void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama);
 //

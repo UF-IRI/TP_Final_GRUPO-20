@@ -1,7 +1,7 @@
 #include "funciones.h"
 
 //leemos paciente y los pasamos a una array dinamico
-void leerPaciente(fstream& fpPacientes, Paciente*& array, int n)
+void leerPaciente(fstream& fpPacientes, Paciente*& array, int* n)
 {
 	//abrimos los archivos.
 	if (!(fpPacientes.is_open())) //comprobamos que abrieron.
@@ -18,7 +18,7 @@ void leerPaciente(fstream& fpPacientes, Paciente*& array, int n)
 	{
 		//extraemos la informacion del paciente.
 		fpPacientes >> aux.dni >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.genero >> coma >> aux.nac >> coma >> aux.estado >> coma >> aux.obra_social;
-		agregarPaciente(array, aux, &n);
+		agregarPaciente(array, aux, n);
 	}
 
 	fpPacientes.close();
@@ -26,11 +26,9 @@ void leerPaciente(fstream& fpPacientes, Paciente*& array, int n)
 	return;
 }
 //leemos consultas y las guardamos en un array dinamico
-void leerConsultas(UltimaConsulta*& array, int n)
+void leerConsultas(fstream& fpConsultas, UltimaConsulta*& array, int *n)
 {
-	fstream fpConsultas;
-
-	fpConsultas.open("Consultas.csv", ios::in);
+	
 
 	if (!(fpConsultas.is_open()))
 		return;
@@ -68,18 +66,18 @@ void leerConsultas(UltimaConsulta*& array, int n)
 		consulta->tm_mday = dia;
 		aux.fechaturno = mktime(consulta);
 
-		AgregarConsulta(array, aux, &n);
+		AgregarConsulta(array, aux, n);
 		
 	}
 	delete consulta;
 	fpConsultas.close();
 } //
 //leemos contacto y los guardamos en un array dinamico
-void leercontacto(Contacto*& con, int n) {
-	fstream fpContactos;
+void leercontacto(fstream& fpContactos, Contacto*& con, int *n) {
+	
 	Contacto aux;
 
-	fpContactos.open("Contactos.csv", ios::in);
+	
 
 	if (!(fpContactos.is_open()))
 		return;
@@ -94,34 +92,32 @@ void leercontacto(Contacto*& con, int n) {
 		fpContactos >> aux.dni >> coma >> aux.telefono >> coma >> aux.celular >> coma;
 		getline(fpContactos, aux.direccion, ',');
 		fpContactos >> aux.mail;
-		agregarContacto(con, aux, &n);
+		agregarContacto(con, aux, n);
 	}
 
 	fpContactos.close();
 }
 //leemos medicos y los guardamos en un array dinamico
-void leerMedicos(Medico*& array, int n)
+void leerMedicos(fstream& fpMedicos, Medico*& array, int* n)
 {
-	fstream fpmedicos;
+	
 
-	fpmedicos.open("Medicos.csv", ios::in);
-
-	if (!(fpmedicos.is_open()))
+	if (!(fpMedicos.is_open()))
 		return;
 
 	string dummys;
 	char coma;
 	Medico aux;
 
-	fpmedicos >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
+	fpMedicos >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys >> coma >> dummys;
 
-	while (fpmedicos)
+	while (fpMedicos)
 	{
-		fpmedicos >> aux.matricula >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.telefono >> coma >> aux.especialidad >> coma >> aux.activo;
-		agregarMedicos(array, aux, &n);
+		fpMedicos >> aux.matricula >> coma >> aux.nombre >> coma >> aux.apellido >> coma >> aux.telefono >> coma >> aux.especialidad >> coma >> aux.activo;
+		agregarMedicos(array, aux, n);
 	}
 
-	fpmedicos.close();
+	fpMedicos.close();
 	return;
 }
 //agregamos el auxiliar de medico a el array dinamico
@@ -191,12 +187,12 @@ void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam)
 	return;
 }
 //unificamos el array dinamico de pacientes con la ultima consulta del mismo y su contacto
-void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult, Contacto*& con, int tamcon) {
+void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int *tamult, Contacto*& con, int *tamcon) {
 	int i,k,j;
 	time_t max;
 
 	for (i = 0; i < tamp; i++) {
-		for (k = 0; k < tamcon; k++) {
+		for (k = 0; k < *tamcon; k++) {
 			if (array[i].dni == con[k].dni) {
 				array[i].con.celular = con[k].celular;
 				array[i].con.direccion = con[k].direccion;
@@ -206,7 +202,7 @@ void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult,
 			}
 		}
 		max = 0;
-		for (j = 0; j < tamult; j++) 
+		for (j = 0; j < *tamult; j++) 
 		{
 			if (array[i].dni == ult[j].dni && max < ult[j].fechaturno && ult[i].presencialidad == 1) {
 				max = ult[j].fechaturno;
@@ -220,7 +216,7 @@ void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int tamult,
 	return;
 }
 //separamos los pacientes entre vigentes y archivados
-void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv)//vigentes y archivados
+void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int *tama, int *tamv)//vigentes y archivados
 {
 	int i;
 	time_t now = time(NULL);
@@ -230,10 +226,10 @@ void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Pacient
 		if (difftime(now, array[i].consulta.fechaturno) < 315532800 && (array[i].estado != "fallecido" || array[i].estado != "internado"))
 			// solo pusimos la cantidad de segundos de 8 años de 365 dias y 2 bisiestos porque sabemos que hay seguro dos años bisiestos en 10 años
 			//y consideramos que 1 dia es despreciable respecto a la cantidad que se quiere calcular
-			agregarPaciente(vigentes, array[i], &tamv);
+			agregarPaciente(vigentes, array[i], tamv);
 
 		else
-			agregarPaciente(archivados, array[i], &tama);
+			agregarPaciente(archivados, array[i], tama);
 	}
 	return;
 }
@@ -305,44 +301,31 @@ void archivoMedicos(UltimoMedico*& array, int tam)
 	return;
 }
 //funcion que usa la secretaria para determinae si vuelven o no los pacientes
-void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) {
+void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama) {
 	int dni = 0;
 	int condicion = 0;//la condicion para salir del for
-	int cont2 = 0;
+	int cont2 = 0;// contador de cuantos vigentes eliminamos
 	int tamp = 0, tamC = 0;
-	int i;
+	int i = 0;
 	tm* auxi = new tm;
 	Paciente* pendientes = new Paciente[tamp];
-	Paciente aux2;
 	UltimaConsulta* consultas = new UltimaConsulta[tamC];
 	UltimaConsulta aux;
-	int pos;
 	string respuesta;
 	char fechaS[36];
 	char fechaT[36];
 
-	do {
-		cout << "Ingrese el dni del paciente a buscar: ";
-		cin >> dni;
-		for (i = 0; i < tamv; i++)
-		{
-			if (dni == vigentes[i].dni) {
-				condicion = 1;
-				pos = i;
-				break;
-			}
-		}
-	} while (condicion < 1);
 
 	int opcion;
 	bool repetir = true;
 
 	do {
+		
 		system("cls"); //se borra lo de la pantalla
 
 		// Texto del menú que se verá cada vez
 		cout << "******** MENU DE OPCIONES ********" << endl;
-		cout << "Paciente " << vigentes[pos].nombre << " " << vigentes[pos].apellido << " ,con DNI : " << vigentes[pos].dni << endl;
+		cout << "Paciente " << vigentes[i].nombre << " " << vigentes[i].apellido << " ,con DNI : " << vigentes[i].dni << endl;
 		cout << "1. Si el paciente retorna" << endl;
 		cout << "2. Si el paciente no retorna" << endl;
 		cout << "3. Si el paciente no atendio" << endl;
@@ -362,7 +345,7 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 			cin >> minutos;
 			cout << "Ingrese el dia: " << endl;
 			cin >> day;
-			cout << "Ingrese el mes: ";
+			cout << "Ingrese el mes: " << endl;
 			cin >> month;
 			cout << "Ingrese el anio: " << endl;
 			cin >> year;
@@ -382,48 +365,38 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 			cin >> respuesta;
 			if (respuesta == "si" || respuesta == "Si" || respuesta == "SI") {
 				cout << "Ingrese la obra social nueva:" << endl;
-				cin >> vigentes[pos].obra_social;
+				cin >> vigentes[i].obra_social;
 
 			}
-			aux.matricula_med = vigentes[pos].consulta.matricula_med;
-			aux.dni = vigentes[pos].dni;
+			aux.matricula_med = vigentes[i].consulta.matricula_med;
+			aux.dni = vigentes[i].dni;
 
 			AgregarConsulta(consultas, aux, &tamC);//guardamos consultas para ingresarlas al archivo luego
-
+			cout << "Se ingreso la nueva consulta, ingrese enter." << endl;
 			system("pause>nul"); // Pausa
 			break;
 
 		case 2:
 			// Lista de instrucciones de la opción 2                
-			for (i = 0; i < tamv; i++)
-			{
-				if (dni == vigentes[i].dni) {
-					aux2 = vigentes[i];
-					agregarPaciente(archivados, aux2, &tama);//pasamos el paciente que no vuelve a archivados.
-					for (int y = i; y < tamv - 1; y++)
-					{
-						vigentes[y] = vigentes[y + 1];
-						cont2++;
-					}
+			agregarPaciente(archivados,vigentes[i], tama);//pasamos el paciente que no vuelve a archivados.
+			for (int y = i; y < *tamv - 1; y++)
+				{
+					vigentes[y] = vigentes[y + 1];
+					cont2++;
 				}
-			}
+				
+			cout << "Se ingreso el paciente archivado, ingrese enter." << endl;
 			system("pause>nul"); // Pausa
 			break;
 
 		case 3:
-
-			for (i = 0; i < tamv; i++)
-			{
-				if (dni == vigentes[i].dni) {
-					aux2 = vigentes[i];
-					agregarPaciente(pendientes, aux2, &tamp);
-					for (int y = i; y < tamv - 1; y++)
-					{
-						vigentes[y] = vigentes[y + 1];
-						cont2++;
-					}
+			agregarPaciente(pendientes, vigentes[i], &tamp);
+			for (int y = i; y < *tamv - 1; y++)
+				{
+					vigentes[y] = vigentes[y + 1];
+					cont2++;
 				}
-			}
+			cout << "Se ingreso el paciente a pendiente, ingrese enter." << endl;
 			system("pause>nul");
 			break;
 
@@ -431,17 +404,18 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 			repetir = false;
 			break;
 		}
+		i++;
 	} while (repetir);
 
 	if (tamp != 0) // si hay pendientes creamos el archivo, sino no
 		pendiente(pendientes, tamp);
 	delete[]pendientes;
-
-	Consultas(consultas, tamC);
-	delete[]consultas;
-
-	eliminarVigente(vigentes, &tamv, cont2);
-	archivoVigentes(vigentes, tamv);
+	if (tamC != 0)
+		Consultas(consultas, tamC);
+		delete[]consultas;
+	if(cont2 != 0)
+	eliminarVigente(vigentes, tamv, cont2);
+	archivoVigentes(vigentes, *tamv);
 
 }
 //crea el archivo pendientes que se utiliza para guardar a aquellos que no contestan el celular(caso 3 del menu)
@@ -500,7 +474,7 @@ void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, i
 	fstream fparchivados;
 	char c = ',';
 
-	fparchivados.open("archivado.csv", ios::app);
+	fparchivados.open("archivado.csv", ios::out);
 
 	if (!(fparchivados.is_open())) //comprobamos que abrieron.
 		return;
