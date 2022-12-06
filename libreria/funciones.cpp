@@ -1,8 +1,11 @@
 #include "funciones.h"
 //leemos paciente y los pasamos a una array dinamico
-void leerPaciente(Paciente*& array, int n, fstream fpPacientes)
+void leerPaciente(Paciente*& array, int n)
 {
 	//abrimos los archivos.
+	fstream fpPacientes;
+
+
 	
 	if (!(fpPacientes.is_open())) //comprobamos que abrieron.
 		return;

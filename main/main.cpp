@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     UltimoMedico* ultimos = new UltimoMedico[tamUltimos];
     fstream fpPacientes;
     fpPacientes.open("Pacientes.csv", ios::in);
-    leerPaciente(pacientes, tamP, fpPacientes);
+    leerPaciente(pacientes, tamP);
     leercontacto(contactos, tamcon);
     leerConsultas(consultas, tamult);
     leerMedicos(Medicos, tamM);

@@ -70,7 +70,7 @@ struct medico
 }; typedef struct medico Medico;
 
 //LEER
-void leerPaciente(Paciente*& array, int n, fstream fpPacientes);
+void leerPaciente(Paciente*& array, int n);
 void leercontacto(Contacto*& con, int n);
 void leerConsultas(UltimaConsulta*& array, int n);
 void leerMedicos(Medico*& array, int n);
