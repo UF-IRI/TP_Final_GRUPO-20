@@ -484,17 +484,26 @@ void eliminarVigente(Paciente*& array, int* tam, int cont)
 
 }
 //guardamos a todos los pacientes que no retornaran por diferentes circunstancias
-void archivoarchi(Paciente*& archivados, int tama) {
+void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC) {
 	fstream fparchivados;
 	char c = ',';
+
 	fparchivados.open("archivado.csv", ios::app);
+
 	if (!(fparchivados.is_open())) //comprobamos que abrieron.
 		return;
 
+	fparchivados << "DNI, Nombre, Apellido, Genero, Nacimiento, Estado, Obra social, Fecha de solicitud de turno, Fecha del turno, Presencialidad, Matricula del medico" << endl;
+
 	for (int i = 0; i < tama; i++) {//copiamos en el archivo , los archivados.
-		fparchivados << archivados[i].dni << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].genero << c << archivados[i].nac
-			<< c << archivados[i].estado << c << archivados[i].obra_social << endl;
+		for (int j = 0; i < tamC; i++)
+		{
+			if (archivados[i].dni == consultas[i].dni)
+				fparchivados << archivados[i].dni << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].genero << c << archivados[i].nac << c << archivados[i].estado
+				<< c << archivados[i].obra_social << c << consultas[i].fecha_solicitado << c << consultas[i].fechaturno << c << consultas[i].presencialidad << c << consultas[i].matricula_med << endl;
+		}
 	}
+
 	fparchivados.close();
 	return;
 }

@@ -34,6 +34,7 @@ int main(int argc, char** argv)
     delete[]ultimos;
     secretaria(vigentes, tamv, archivados, tama);
     archivoarchi(archivados, tama);
+    delete[]consultas;
     delete[]pacientes;
     delete[]vigentes;
     delete[]archivados;
