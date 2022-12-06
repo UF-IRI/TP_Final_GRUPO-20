@@ -8,13 +8,6 @@
 
 using namespace std;
 
-struct fecha
-{
-    unsigned int dia{};
-    unsigned int mes{};
-    unsigned int anio{};
-};
-
 //dni_pac , fecha_solicitado , fecha_turno , presento , matricula_med
 struct ultimoMedico
 {
@@ -81,7 +74,7 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
 void leerPaciente(Paciente*& array, int n);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
 void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
-void archivoarchi(Paciente*& archivados, int tama, string nombrearchivados);
+void archivoarchi(Paciente*& archivados, int tama);
 void pendiente(Paciente*& pendientes, int tamp);
 void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
 void Consultas(UltimaConsulta*& consulta, int tamC);
