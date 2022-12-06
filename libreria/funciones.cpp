@@ -377,9 +377,10 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 			if (respuesta == "si" || respuesta == "Si" || respuesta == "SI") {
 				cout << "Ingrese la obra social nueva:" << endl;
 				cin >> vigentes[pos].obra_social;
+
 			}
-			aux.matricula_med = vigentes->consulta.matricula_med;
-			aux.dni = vigentes->dni;
+			aux.matricula_med = vigentes[pos].consulta.matricula_med;
+			aux.dni = vigentes[pos].dni;
 
 			AgregarConsulta(consultas, aux, &tamC);//guardamos consultas para ingresarlas al archivo luego
 
@@ -434,6 +435,7 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama) 
 	delete[]consultas;
 
 	eliminarVigente(vigentes, &tamv, cont2);
+	archivoVigentes(vigentes, tamv);
 
 }
 //crea el archivo pendientes que se utiliza para guardar a aquellos que no contestan el celular(caso 3 del menu)
@@ -505,5 +507,20 @@ void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, i
 	}
 
 	fparchivados.close();
+	return;
+}
+void archivoVigentes(paciente*& vigentes, int tamv) {
+	fstream fpv;
+	int i;
+	char c = ',';
+	fpv.open("vigentes.csv", ios::out);
+	if (!(fpv.is_open()))
+		return;
+	fpv << "dni , nombre , apellido , sexo , natalicio , estado , obra_social"<<endl;
+	for (i = 0; i < tamv; i++) {
+		fpv << vigentes[i].dni << c << vigentes[i].nombre << c << vigentes[i].apellido << c << vigentes[i].genero << c << vigentes[i].nac << c 
+			<< vigentes[i].estado << c << vigentes[i].obra_social << endl;
+	}
+	fpv.close();
 	return;
 }

@@ -74,7 +74,7 @@ void secretaria(Paciente*& vigentes, int tamv, Paciente*& archivados, int tama);
 void leerPaciente(Paciente*& array, int n);
 void agregarPaciente(Paciente*& array, Paciente aux, int* n);
 void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Paciente*& vigentes, int tama, int tamv);
-void archivoarchi(Paciente*& archivados, int tama);
+void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC);
 void pendiente(Paciente*& pendientes, int tamp);
 void AgregarConsulta(UltimaConsulta*& consultas, UltimaConsulta aux, int* tam);
 void Consultas(UltimaConsulta*& consulta, int tamC);
@@ -87,3 +87,4 @@ void medicos(UltimoMedico *&ultimo, Paciente*& array, Medico *&med, int tamP, in
 void leerMedicos(Medico*& array, int n);
 void ultimosMedicos(UltimoMedico *&array, UltimoMedico aux, int *tam);
 void archivoMedicos(UltimoMedico*& array, int tam);
+void archivoVigentes(paciente*& vigentes, int* tamv);
