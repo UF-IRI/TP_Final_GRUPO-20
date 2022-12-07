@@ -49,7 +49,7 @@ int main()
     archivoMedicos(ultimos, tamUltimos, fpultimo);
     delete[]Medicos;
     delete[]ultimos;
-    string pendient = (BASE_PATH + "../data_files/output/pendintes.csv");
+    string pendient = (BASE_PATH + "../data_files/output/pendientes.csv");
     fppendientes.open(pendient, ios::out);
     secretaria(vigentes, &tamv, archivados, &tama, pendientes, &tamp, con, &tamC);
     if (tamp != 0) // si hay pendientes creamos el archivo, sino no
