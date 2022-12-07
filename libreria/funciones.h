@@ -90,12 +90,12 @@ void unicoPaciente(Paciente*& array, int tamp, UltimaConsulta*& ult, int *tamult
 //
 
 //GUARDAR Y CREAR ARCHIVOS
-void medicos(UltimoMedico*& ultimo, Paciente*& array, Medico*& med, int tamP, int tamM, int tamUltimos);
-void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC);
-void pendiente(Paciente*& pendientes, int tamp);
-void Consultas(UltimaConsulta*& consulta, int tamC);
-void archivoMedicos(UltimoMedico*& array, int tam);
-void archivoVigentes(paciente*& vigentes, int tamv);
+void medicos(UltimoMedico*& ultimo, Paciente*& array, Medico*& med, int tamP, int tamM, int *tamUltimos);
+void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC, fstream& archi);
+void pendiente(Paciente*& pendientes, int tamp, fstream &pend);
+void Consultas(UltimaConsulta*& consulta, int tamC, fstream &consultas);
+void archivoMedicos(UltimoMedico*& array, int tam, fstream& ultimomedico);
+void archivoVigentes(paciente*& vigentes, int tamv, fstream& vigente);
 //
 
 //ELIMINAR
@@ -103,5 +103,5 @@ void eliminarVigente(Paciente*& array, int* tam, int cont);
 //
 
 //SECRETARIA
-void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama);
+void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama, Paciente *&pendiente, int* tamp, UltimaConsulta *&con, int* tamC);
 //

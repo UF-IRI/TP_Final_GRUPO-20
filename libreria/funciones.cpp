@@ -234,7 +234,7 @@ void vigentesyArchivados(Paciente*& array, int n, Paciente*& archivados, Pacient
 	return;
 }
 //sacamos la informacion del ultimo medico que atendio al respectivo paciente y creamos un archivo con eso
-void medicos(UltimoMedico *&ultimos, Paciente*& array, Medico*& med, int tamP, int tamM, int tamUltimos)
+void medicos(UltimoMedico *&ultimos, Paciente*& array, Medico*& med, int tamP, int tamM, int *tamUltimos)
 {
 	int i, j;
 	UltimoMedico aux;
@@ -255,12 +255,11 @@ void medicos(UltimoMedico *&ultimos, Paciente*& array, Medico*& med, int tamP, i
 				aux.nombreP = array[i].nombre;
 				aux.obra_social = array[i].obra_social;
 				aux.telefonoM = med[j].telefono;
-				ultimosMedicos(ultimos, aux, &tamUltimos);
+				ultimosMedicos(ultimos, aux, tamUltimos);
 				break;
 			}
 		}
 	}
-	archivoMedicos(ultimos, tamUltimos);
 }
 //agregamos el auxiliar de ultimomedico a el array dinamico
 void ultimosMedicos(UltimoMedico*& array, UltimoMedico aux, int* tam)
@@ -280,37 +279,30 @@ void ultimosMedicos(UltimoMedico*& array, UltimoMedico aux, int* tam)
 	return;
 }
 //creamos el archivo que contiene a los ultimos medicos que atendieron a los pacientes
-void archivoMedicos(UltimoMedico*& array, int tam)
+void archivoMedicos(UltimoMedico*& array, int tam, fstream& ultimomedico)
 {
-	fstream fpUltimos;
-	int i;
-
-	fpUltimos.open("UltimosMedico.csv", ios::out);
-
-	if (!(fpUltimos.is_open()))
+	if (!(ultimomedico.is_open()))
 		return;
 
-	fpUltimos << "DNI del paciente, Nombre del paciente, Apellido del paciente, Obra social, Nombre del medico, Apellido del medico, Matricula, Especialidad, Telefono del medico, Activo" << endl;
+	ultimomedico << "DNI del paciente" << ',' << "Nombre del paciente" << ',' << "Apellido del paciente" << ',' << "Obra social" << ',' << "Nombre del medico" 
+		<< ',' << "Apellido del medico" << ',' << "Matricula" << ',' << "Especialidad" << ',' << "Telefono del medico" << ','<< "Activo" << endl;
 
-	for (i = 0; i < tam; i++)
+	for (int i = 0; i < tam; i++)
 	{
-		fpUltimos << array[i].dni << ',' << array[i].nombreP << ',' << array[i].apellidoP << ',' << array[i].obra_social << ',' << array[i].nombreM << ',' << array[i].apellidoM << ',' 
+		ultimomedico << array[i].dni << ',' << array[i].nombreP << ',' << array[i].apellidoP << ',' << array[i].obra_social << ',' << array[i].nombreM << ',' << array[i].apellidoM << ',' 
 			<< array[i].matricula<< ',' << array[i].especialidad << ',' << array[i].telefonoM << ',' << array[i].activo << endl;
 	}
 
-	fpUltimos.close();
+	ultimomedico.close();
 	return;
 }
 //funcion que usa la secretaria para determinae si vuelven o no los pacientes
-void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama) {
+void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama, Paciente*& pendiente, int *tamp, UltimaConsulta *&con, int*tamC) {
 	int dni = 0;
 	int condicion = 0;//la condicion para salir del for
 	int cont2 = 0;// contador de cuantos vigentes eliminamos
-	int tamp = 0, tamC = 0;
 	int i = 0;
 	tm* auxi = new tm;
-	Paciente* pendientes = new Paciente[tamp];
-	UltimaConsulta* consultas = new UltimaConsulta[tamC];
 	UltimaConsulta aux;
 	string respuesta;
 	char fechaS[36];
@@ -372,7 +364,7 @@ void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama
 			aux.matricula_med = vigentes[i].consulta.matricula_med;
 			aux.dni = vigentes[i].dni;
 
-			AgregarConsulta(consultas, aux, &tamC);//guardamos consultas para ingresarlas al archivo luego
+			AgregarConsulta(con, aux, tamC);//guardamos consultas para ingresarlas al archivo luego
 			cout << "Se ingreso la nueva consulta, ingrese enter." << endl;
 			system("pause>nul"); // Pausa
 			break;
@@ -381,22 +373,18 @@ void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama
 			// Lista de instrucciones de la opción 2                
 			agregarPaciente(archivados,vigentes[i], tama);//pasamos el paciente que no vuelve a archivados.
 			for (int y = i; y < *tamv - 1; y++)
-				{
-					vigentes[y] = vigentes[y + 1];
-					cont2++;
-				}
+				vigentes[y] = vigentes[y + 1];
+			cont2++;
 				
 			cout << "Se ingreso el paciente archivado, ingrese enter." << endl;
 			system("pause>nul"); // Pausa
 			break;
 
 		case 3:
-			agregarPaciente(pendientes, vigentes[i], &tamp);
+			agregarPaciente(pendiente, vigentes[i], tamp);
 			for (int y = i; y < *tamv - 1; y++)
-				{
-					vigentes[y] = vigentes[y + 1];
-					cont2++;
-				}
+				vigentes[y] = vigentes[y + 1];
+			cont2++;
 			cout << "Se ingreso el paciente a pendiente, ingrese enter." << endl;
 			system("pause>nul");
 			break;
@@ -408,57 +396,48 @@ void secretaria(Paciente*& vigentes, int *tamv, Paciente*& archivados, int *tama
 		i++;
 	} while (repetir);
 
-	if (tamp != 0) // si hay pendientes creamos el archivo, sino no
-		pendiente(pendientes, tamp);
-	delete[]pendientes;
-	if (tamC != 0)
-		Consultas(consultas, tamC);
-		delete[]consultas;
 	if(cont2 != 0)
 	eliminarVigente(vigentes, tamv, cont2);
-	archivoVigentes(vigentes, *tamv);
-
 }
 //crea el archivo pendientes que se utiliza para guardar a aquellos que no contestan el celular(caso 3 del menu)
-void pendiente(Paciente*& pendientes, int tamp) {
+void pendiente(Paciente*& pendientes, int tamp, fstream& pend) {
 	char c = ',';
-	fstream fp;
-	fp.open("Pendientes.csv", ios::out);
-	if (!(fp.is_open()))
+
+	if (!(pend.is_open()))
 		return;
 
-	fp << "DNI , Nombre , Apellido , Sexo , Natalicio , Estado , Obra_Social " << endl; // le escribo el header
+	pend << "DNI" << c << "Nombre" << c << "Apellido" << c << "Sexo" << c << "Natalicio" << c << "Estado" << c << "Obra_Social" << endl;
+	// le escribo el header
 
 	for (int i = 0; i < tamp; i++) {
-		fp << pendientes[i].dni << c << pendientes[i].nombre << c << pendientes[i].apellido << c << pendientes[i].genero << c << pendientes[i].nac
+		pend << pendientes[i].dni << c << pendientes[i].nombre << c << pendientes[i].apellido << c << pendientes[i].genero << c << pendientes[i].nac
 			<< c << pendientes[i].estado << c << pendientes[i].obra_social << endl;
 	}
-	fp.close();
+	pend.close();
 }
 //se agregan las nuevas consultas al archivo original(caso 1 del menu)
-void Consultas(UltimaConsulta*& consulta, int tamC)
+void Consultas(UltimaConsulta*& consulta, int tamC, fstream &consultas)
 {
-	fstream fp;
 	tm* aux = new tm;
 	char fecha[36];
 
-	fp.open("Consultas.csv", ios::app);
-	if (!(fp.is_open()))
+	if (!(consultas.is_open()))
 		return;
+
 	for (int i = 0; i < tamC; i++)
 	{
 		localtime_s(aux, &consulta[i].fechaturno);
 		asctime_s(fecha, 36, aux);
-		fp << consulta[i].dni << ',' << consulta[i].fecha_solicitado << ',' << fecha << ',' << consulta[i].presencialidad << ',' << consulta[i].matricula_med << endl;
+		consultas << consulta[i].dni << ',' << consulta[i].fecha_solicitado << ',' << fecha << ',' << consulta[i].presencialidad << ',' << consulta[i].matricula_med << endl;
 	}
 
-	fp.close();
+	consultas.close();
 	return;
 }
 //elimina los vigentes que no retornaran o no contestan(caso 2 del menu)
 void eliminarVigente(Paciente*& array, int* tam, int cont)
 {
-	*tam = *tam - cont;
+	*tam = (*tam) - cont;
 	int i = 0;
 	paciente* aux1 = new paciente[*tam];
 
@@ -471,46 +450,41 @@ void eliminarVigente(Paciente*& array, int* tam, int cont)
 
 }
 //guardamos a todos los pacientes que no retornaran por diferentes circunstancias
-void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC) {
-	fstream fparchivados;
+void archivoarchi(Paciente*& archivados, UltimaConsulta*& consultas, int tama, int tamC, fstream &archi) {
 	char c = ',';
 
-	fparchivados.open("archivado.csv", ios::out);
-
-	if (!(fparchivados.is_open())) //comprobamos que abrieron.
+	if (!(archi.is_open())) //comprobamos que abrieron.
 		return;
 
-	fparchivados << "DNI, Nombre, Apellido, Genero, Nacimiento, Estado, Obra social, Fecha de solicitud de turno, Fecha del turno, Presencialidad, Matricula del medico" << endl;
+	archi << "DNI" << c << "Nombre" << c << "Apellido" << c << "Genero" << c << "Nacimiento" << c << "Estado" << c << "Obra social" << c <<
+		"Fecha de solicitud de turno" << c << "Fecha del turno" << c << "Presencialidad" << c << "Matricula del medico" << endl;
 
 	for (int i = 0; i < tama; i++) {//copiamos en el archivo , los archivados.
-		for (int j = 0; i < tamC; i++)
+		for (int j = 0; j < tamC; j++)
 		{
-			if (archivados[i].dni == consultas[i].dni)
-				fparchivados << archivados[i].dni << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].genero << c << archivados[i].nac << c << archivados[i].estado
-				<< c << archivados[i].obra_social << c << consultas[i].fecha_solicitado << c << consultas[i].fechaturno << c << consultas[i].presencialidad << c << consultas[i].matricula_med << endl;
+			if (archivados[i].dni == consultas[j].dni)
+				archi << archivados[i].dni << c << archivados[i].nombre << c << archivados[i].apellido << c << archivados[i].genero << c << archivados[i].nac << c << archivados[i].estado
+				<< c << archivados[i].obra_social << c << consultas[j].fecha_solicitado << c << consultas[j].fechaturno << c << consultas[j].presencialidad << c << consultas[j].matricula_med << endl;
 		}
 	}
 
-	fparchivados.close();
+	archi.close();
 	return;
 }
 //guardamos los vigentes en su respectivo archivo
-void archivoVigentes(paciente*& vigentes, int tamv) {
-	fstream fpv;
+void archivoVigentes(paciente*& vigentes, int tamv, fstream &vigente) {
 	int i;
 	char c = ',';
 
-	fpv.open("vigentes.csv", ios::out);
-
-	if (!(fpv.is_open()))
+	if (!(vigente.is_open()))
 		return;
 
-	fpv << "DNI , Nombre , Apellido , Sexo , Natalicio , Estado , Obra_social"<<endl;
+	vigente << "DNI" << c << "Nombre" << c << "Apellido" << c << "Sexo" << c << "Natalicio" << c << "Estado" << c << "Obra_social" << endl;
 
 	for (i = 0; i < tamv; i++) {
-		fpv << vigentes[i].dni << c << vigentes[i].nombre << c << vigentes[i].apellido << c << vigentes[i].genero << c << vigentes[i].nac << c 
+		vigente << vigentes[i].dni << c << vigentes[i].nombre << c << vigentes[i].apellido << c << vigentes[i].genero << c << vigentes[i].nac << c 
 			<< vigentes[i].estado << c << vigentes[i].obra_social << endl;
 	}
-	fpv.close();
+	vigente.close();
 	return;
 }
